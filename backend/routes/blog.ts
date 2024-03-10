@@ -24,9 +24,9 @@ blogRouter.use('/*',async(c,next) =>{
     if(!authHeader){
       return c.json({error : 'unauthorized'},401)
     }
-    const token:any  = authHeader.split(' ')[1]
-  
-    const payload = await Jwt.verify(token,c.env.JWT_SECRET);
+    
+   
+    const payload = await Jwt.verify(authHeader,c.env.JWT_SECRET);
   
     if(!payload){
       return c.json({error : "unauthorized"},401)
@@ -95,7 +95,18 @@ blogRouter.get('/bulk',async(c) =>{
        datasourceUrl  :c.env.DATABASE_URL 
     }).$extends(withAccelerate())
 
-    const blogs = await prisma.post.findMany({})
+    const blogs = await prisma.post.findMany({
+        select :{
+            id : true,
+            content : true,
+            title : true,
+            author :{
+                select :{
+                    name : true
+                }
+            }
+        }
+    })
 
     return c.json({
         blogs
@@ -111,10 +122,21 @@ blogRouter.get('/:id',async(c) =>{
     }).$extends(withAccelerate())
 
     const blogId =  c.req.param('id')
-    const blog = await prisma.post.findUnique({
+    const blog = await prisma.post.findFirst({
         where  :{
             id : blogId,
-            authorId : userId
+            
+            
+        },
+        select:{
+            id :true,
+            title : true,
+            content : true,
+            author:{
+                select:{
+                    name : true
+                }
+            }
         }
     })
 
@@ -122,7 +144,7 @@ blogRouter.get('/:id',async(c) =>{
         return c.json({msg : "No blog founded"},401)
     }
 
-    return c.json({blog})
+    return c.json(blog)
 
 })
 

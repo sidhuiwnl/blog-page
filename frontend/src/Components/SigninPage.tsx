@@ -18,7 +18,8 @@ function SigninPage() {
     try {
       const response = await axios.post(`${BACKEND_URL}/api/v1/user/Signin`,postInputs)
       const jwt = response.data
-      localStorage.setItem('token',jwt)
+      console.log(jwt)
+      localStorage.setItem('token',jwt.token)
       navigate('/blogs')
     } catch (error) {
       alert('the request failed')

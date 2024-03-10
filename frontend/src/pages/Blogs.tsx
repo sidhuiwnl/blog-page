@@ -1,8 +1,22 @@
 
 import AppBar from '../Components/AppBar'
 import BlogCard from '../Components/BlogCard'
+import BlogSkeleton from '../Components/BlogSkeleton'
+import { useBlogs } from '../hooks'
 
 function Blogs() {
+  const {loading,blogs} = useBlogs()
+
+  if(loading){
+    return <div>
+      <BlogSkeleton/>
+      <BlogSkeleton/>
+      <BlogSkeleton/>
+      <BlogSkeleton/>
+      <BlogSkeleton/>
+      <BlogSkeleton/>
+    </div>
+  }
   return (
     <div>
       <div className='mb-2'>
@@ -12,24 +26,21 @@ function Blogs() {
       <div>
       <div className='flex justify-center'>
        <div>
-          <BlogCard
-            id={"1"}
-            authorName={'sidharth'}
-            title={'how a ugly website can make 5000 dollars wvery month thayt is creativivty'}
-            content={'adadakdadkjaaaaaaaaaaaaadadakjdadadakdbakjdbsakjdbsakdbsakjdbsakjdbsakdbsakjdbakjdbakjdbsakjdbsakjdb....'}
-             PublishedDate={"2nd Feb 2024"}
-
-
-          />
-          <BlogCard
-            id={"1"}
-            authorName={'sidharth'}
-            title={'how a ugly website can make 5000 dollars wvery month thayt is creativivty'}
-            content={'adadakdadkjaaaaaaaaaaaaadadakjdadadakdbakjdbsakjdbsakdbsakjdbsakjdbsakdbsakjdbakjdbakjdbsakjdbsakjdb....'}
+          {blogs.map((blog) =>
+            <BlogCard
+            key={blog.id}
+            id={blog.id}
+            authorName={blog.author.name || "Anonymous"}
+            title={blog.title}
+            content={blog.content}
             PublishedDate={"2nd Feb 2024"}
 
 
           />
+          )
+
+        }
+          
        </div>
 
     </div>

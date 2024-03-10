@@ -12,7 +12,7 @@ interface BlogCardProps{
 function BlogCard({id,authorName,title,content,PublishedDate} : BlogCardProps) {
   return (
     
-        <Link to={`/blog/:${id}`}>
+        <Link to={`/blog/${id}`}>
             <div className="border-b  border-slate-200 pb-4 p-4 w-screen max-w-screen-md cursor-pointer">
         <div className="flex ">
                 <Avatar size = "small" authorName = {authorName}/>
